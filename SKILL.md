@@ -29,6 +29,8 @@ description: 協助使用 Figma 匯出插件將設計轉入 Adobe Illustrator，
 
 ## 依證據區分問題
 
+有本機檔案與 Python 工具時，先閱讀 [唯讀檢查工具](references/diagnostic-tool.md)，使用 `scripts/inspect_export.py` 檢查使用者明確指定的 SVG。報告留在本地；此步不會執行 JSX 或改動原檔。多個 SVG 必須明確選擇，不能猜測。工具不可用時依下表人工檢查，不把缺少 Python 當成修改設計的理由。結構報告不等於 Illustrator 渲染、字型安裝或存檔已驗證。
+
 | 現象 | 優先檢查 | 不能直接推論 |
 |---|---|---|
 | 部分文字不見 | SVG 是否仍有文字、文字所在群組的 filter、遮色片、透明度、填色、物件位置 | 不一定是缺少字型 |

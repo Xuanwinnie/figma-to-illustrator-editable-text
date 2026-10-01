@@ -9,6 +9,7 @@
 ## 它能做什麼
 
 - 先讀插件說明，再決定正常匯入或補丁修復方式。
+- 提供唯讀 Python 工具，檢查 SVG 結構、字體資料、圖片連結、文字濾鏡與漸層風險。
 - 區分缺少字型、占位字體名稱、文字濾鏡、圖片連結與漸層填色問題。
 - 保留原檔，在獨立副本進行修復。
 - 近似漸層、移除陰影或替換字型前，先取得使用者同意。
@@ -40,6 +41,19 @@ git clone https://github.com/Xuanwinnie/figma-to-illustrator-editable-text.git \
 不想安裝時，也可以使用下方直接讀取 GitHub 的提示詞，前提是助理能存取儲存庫與你的檔案。
 
 ## 使用流程
+
+### 執行唯讀檢查
+
+需要 Python 3，不需額外套件。在 repository 資料夾執行，替換成你的實際路徑：
+
+```bash
+python3 scripts/inspect_export.py '/path/to/export-folder' \
+  --svg 'Page_1_RGB.svg' --output '/path/to/new-report.json'
+```
+
+多個 SVG 時必須指定 `--svg`。工具不執行 JSX、不修改設計、不下載圖片，也不覆蓋報告。檢查完成不代表字型已安裝、Illustrator 顯示正確或 AI 已存檔。詳細參數與限制見 [檢查工具說明](references/diagnostic-tool.md)。
+
+### 匯入與修復
 
 ```text
 匯出資料夾或 ZIP ＋ 插件說明
@@ -89,7 +103,12 @@ git clone https://github.com/Xuanwinnie/figma-to-illustrator-editable-text.git \
 figma-to-illustrator-editable-text/
 ├── SKILL.md
 ├── references/
+│   ├── diagnostic-tool.md
 │   └── observed-failures.md
+├── scripts/
+│   └── inspect_export.py
+├── tests/
+│   └── test_inspect_export.py
 ├── README.md
 └── README.zh.md
 ```
@@ -100,6 +119,15 @@ figma-to-illustrator-editable-text/
 - 移除文字濾鏡可能恢復顯示，但會改變陰影或其他效果。
 - 相容性取決於匯出內容、插件版本、字型與 Illustrator 版本；案例中的數量不能當成通用預設值。
 - 不附本次專案綁定的補丁腳本、設計、圖片或字型檔。
+- 目前自動化只完成唯讀檢查；通用修復腳本與 AI 重新開啟驗證尚未實作。
+
+## 測試
+
+```bash
+python3 -B -m unittest discover -s tests -v
+```
+
+測試使用匿名合成資料，不附私人設計素材或客戶匯出包。
 
 ## License
 

@@ -9,6 +9,7 @@ It covers SVG exports with companion JSX scripts, font metadata, and image folde
 ## What it does
 
 - Reads the plugin instructions before choosing an import or repair approach.
+- Includes a read-only Python checker for SVG structure, font metadata, image links, text filters, and gradient risks.
 - Separates missing fonts, placeholder font names, text filters, image links, and gradient-fill problems.
 - Preserves original files and makes repairs in separate copies.
 - Requires approval before approximating gradients, removing shadows, or substituting fonts.
@@ -40,6 +41,19 @@ Use figma-to-illustrator-editable-text to process the Figma plugin export I supp
 You can also use the GitHub-reading prompt below without installing the Skill, provided the agent can access the repository and your files.
 
 ## Workflow
+
+### Run the read-only checker
+
+Requires Python 3; no extra packages. From this repository, replace the example paths with your own:
+
+```bash
+python3 scripts/inspect_export.py '/path/to/export-folder' \
+  --svg 'Page_1_RGB.svg' --output '/path/to/new-report.json'
+```
+
+If the folder contains multiple SVGs, `--svg` is required. The checker does not execute JSX, modify designs, download images, or overwrite reports. A completed check is not proof of installed fonts, correct Illustrator rendering, or a saved AI file. See [checker usage and limits](references/diagnostic-tool.md).
+
+### Import and repair
 
 ```text
 Export folder or ZIP + plugin instructions
@@ -89,7 +103,12 @@ They distinguish observed fixes from approximations and unfinished verification.
 figma-to-illustrator-editable-text/
 ├── SKILL.md
 ├── references/
+│   ├── diagnostic-tool.md
 │   └── observed-failures.md
+├── scripts/
+│   └── inspect_export.py
+├── tests/
+│   └── test_inspect_export.py
 ├── README.md
 └── README.zh.md
 ```
@@ -100,6 +119,15 @@ figma-to-illustrator-editable-text/
 - Removing a text filter can restore visibility while changing the shadow or other effect.
 - Compatibility depends on the export, plugin version, fonts, and Illustrator version; case-specific counts are not universal defaults.
 - No project-specific patch scripts, artwork, images, or font files are bundled.
+- Current automation covers read-only inspection only. General-purpose repair scripts and AI reopening verification are not implemented.
+
+## Tests
+
+```bash
+python3 -B -m unittest discover -s tests -v
+```
+
+Tests use synthetic data, not private design assets or customer export packages.
 
 ## License
 
