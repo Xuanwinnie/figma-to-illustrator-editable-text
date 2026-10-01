@@ -1,16 +1,106 @@
-# Figma → Illustrator 可編輯文字修復
+# Figma to Illustrator Editable Text
 
-## 下次直接複製這一行
+English · [繁體中文](README.zh.md)
 
-先提供解壓縮的匯出資料夾路徑，或附上完整 ZIP，再貼上以下提示詞。不需要先安裝 skill；請讓助理讀取 GitHub 上的說明。若無法讀取，應先告知，不要假裝已載入。
+A reusable Skill for diagnosing Figma plugin exports and repairing their import into Adobe Illustrator while preserving editable text and original files.
 
-```text
-請先完整讀取 https://github.com/Xuanwinnie/figma-to-illustrator-editable-text/blob/main/SKILL.md，並依需要讀取其中連結的案例紀錄，再處理我提供的 Figma 插件匯出資料夾；若尚未提供資料夾路徑或 ZIP，先向我索取，不要猜測。保留可編輯文字與原檔；若需要近似漸層、移除陰影或替換字型，先問我。完成後另存新的 AI 檔，確認存檔成功並重新開啟驗證；若有步驟無法完成，明確告知，不要宣稱已完成。
+It covers SVG exports with companion JSX scripts, font metadata, and image folders. This is a diagnosis and repair workflow, not a one-click patch or a guarantee of lossless conversion.
+
+## What it does
+
+- Reads the plugin instructions before choosing an import or repair approach.
+- Separates missing fonts, placeholder font names, text filters, image links, and gradient-fill problems.
+- Preserves original files and makes repairs in separate copies.
+- Requires approval before approximating gradients, removing shadows, or substituting fonts.
+- Checks editable text, fonts, images, fills, and artboards.
+- Requires successful AI saving and reopening before reporting completion.
+
+## Quick start
+
+### Install for Codex
+
+```bash
+git clone https://github.com/Xuanwinnie/figma-to-illustrator-editable-text.git \
+  ~/.codex/skills/figma-to-illustrator-editable-text
 ```
 
-## 內容
+### Install for Claude Code
 
-- [SKILL.md](SKILL.md)：正常匯入、診斷、修復及驗證流程。
-- [案例紀錄](references/observed-failures.md)：本次補丁問題、處理方式、優化與未完成事項。
+```bash
+git clone https://github.com/Xuanwinnie/figma-to-illustrator-editable-text.git \
+  ~/.claude/skills/figma-to-illustrator-editable-text
+```
 
-這是診斷與修復流程 skill，不是一鍵補丁工具；不包含設計素材或字型檔。
+Reload skills or restart the relevant AI tool if needed, then provide the extracted export folder or complete ZIP. Installation does not grant access to Illustrator; the agent also needs suitable local-file and application-control tools.
+
+```text
+Use figma-to-illustrator-editable-text to process the Figma plugin export I supplied. Preserve editable text and original files. Ask before approximating gradients, removing shadows, or substituting fonts. Save a new AI file and reopen it to verify the result; report any incomplete steps clearly.
+```
+
+You can also use the GitHub-reading prompt below without installing the Skill, provided the agent can access the repository and your files.
+
+## Workflow
+
+```text
+Export folder or ZIP + plugin instructions
+        ↓
+Inspect SVG, JSX, font metadata, and images
+        ↓
+Follow the plugin's normal import procedure
+        ↓
+Identify problems and test repairs on a copy
+        ↓
+Confirm any visual trade-offs with the user
+        ↓
+Verify text, fonts, images, fills, and artboards
+        ↓
+Save a new AI file and reopen it for verification
+```
+
+## Copyable prompts
+
+### One-line prompt — no installation required
+
+Provide the folder path or ZIP with this prompt. If the agent cannot read the Skill, it should say so rather than pretend it has loaded it.
+
+```text
+First read https://github.com/Xuanwinnie/figma-to-illustrator-editable-text/blob/main/SKILL.md in full and its linked case notes when relevant, then process my supplied Figma plugin export folder. If I have not provided a folder path or ZIP, ask for it instead of guessing. Preserve editable text and original files; ask before approximating gradients, removing shadows, or substituting fonts. Save a new AI file, confirm saving succeeded, and reopen it for verification. Clearly report any step that cannot be completed; do not claim completion prematurely.
+```
+
+### Diagnosis only
+
+```text
+Use figma-to-illustrator-editable-text to diagnose this export's missing text, changed fonts, missing images, or incorrect colors. Explain the evidence and proposed repairs first; do not modify the files yet.
+```
+
+## Core output
+
+When the workflow can be completed, deliver a separately saved and reopened AI file plus a verification summary. Include what was repaired, which text remains editable, known visual differences, and any incomplete steps. Never offer a nonexistent AI file as a completed deliverable.
+
+## Observed problems and improvements
+
+The [case notes](references/observed-failures.md) record placeholder fonts, text-filter failures, image embedding, black gradient text, unreliable imported IDs, blank text frames, repeated-script conflicts, and saving failures.
+
+They distinguish observed fixes from approximations and unfinished verification. The original case restored visible text and images, but did not verify a final saved AI file; native gradients and shadows were not fully restored.
+
+## Repository structure
+
+```text
+figma-to-illustrator-editable-text/
+├── SKILL.md
+├── references/
+│   └── observed-failures.md
+├── README.md
+└── README.zh.md
+```
+
+## Limitations
+
+- Editable text and exact appearance may require a trade-off. Character-by-character colors only approximate a gradient and may need recalculation after edits.
+- Removing a text filter can restore visibility while changing the shadow or other effect.
+- Compatibility depends on the export, plugin version, fonts, and Illustrator version; case-specific counts are not universal defaults.
+- No project-specific patch scripts, artwork, images, or font files are bundled.
+
+## License
+
+No license has been specified for this repository yet. Public availability does not by itself grant redistribution rights. Check permissions separately for third-party plugins, fonts, and design assets.
